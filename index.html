@@ -2,19 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Rep Workout Split</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Rep Active Workout</title>
   <style>
     :root {
-      --bg: #0d0d0f;
-      --card-bg: #18181c;
-      --card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f5f5f7;
+      --bg: #000000;
+      --sheet-bg: #ffffff;
+      --sheet-card: #f2f2f7;
+      --sheet-border: #e5e5ea;
+      --text-dark: #000000;
+      --text-light: #ffffff;
       --text-muted: #8e8e93;
-      --accent: #0a84ff;
-      --accent-glow: rgba(10, 132, 255, 0.25);
-      --success: #30d158;
-      --tag-bg: rgba(255, 255, 255, 0.06);
+      --accent-green: #30d158;
+      --accent-orange: #ff9500;
+      --accent-red: #ff453a;
+      --accent-blue: #0a84ff;
+      --btn-dark: #1c1c1e;
+      --checkbox-checked: #3a3a3c;
     }
 
     * {
@@ -22,146 +28,287 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
       background-color: var(--bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding: 20px 16px 60px;
+      color: var(--text-light);
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
     }
 
-    .container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    /* Header & Branding */
-    .brand-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      background: var(--tag-bg);
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .brand-badge span {
-      color: var(--accent);
-    }
-
-    .header-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 24px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .split-title {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 12px;
-      line-height: 1.2;
-    }
-
-    .split-meta {
+    /* Top Navigation Bar */
+    .top-nav {
+      height: 54px;
+      padding: 10px 16px 0;
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+      margin-top: env(safe-area-inset-top, 0px);
     }
 
-    .meta-pill {
-      font-size: 13px;
-      font-weight: 600;
-      padding: 5px 10px;
-      background: var(--tag-bg);
-      border-radius: 8px;
-      color: var(--text-muted);
-    }
-
-    .open-app-btn {
+    .nav-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #0a84ff, #5e5ce6);
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 16px;
-      margin-top: 18px;
-      box-shadow: 0 4px 20px var(--accent-glow);
-      transition: transform 0.1s ease;
-    }
-
-    .open-app-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* Exercises List */
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted);
-      margin: 24px 4px 12px;
-    }
-
-    .exercise-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
+      background: var(--btn-dark);
+      color: var(--text-light);
+      border: none;
       border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
     }
 
-    .exercise-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 14px;
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
     }
 
-    .exercise-name {
-      font-size: 18px;
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .top-counter {
+      font-size: 17px;
       font-weight: 700;
-      line-height: 1.3;
-      flex: 1;
+      letter-spacing: -0.2px;
+      font-variant-numeric: tabular-nums;
     }
 
-    .rest-badge {
-      font-size: 12px;
+    .finish-btn {
+      height: 38px;
+      padding: 0 14px;
+      gap: 8px;
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+    }
+
+    .watch-icon {
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+    }
+
+    .watch-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Top Timer Area */
+    .timer-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 30px;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .big-timer {
+      font-size: 78px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
+    }
+
+    .total-elapsed {
+      font-size: 18px;
       font-weight: 600;
       color: var(--text-muted);
-      background: var(--tag-bg);
-      padding: 4px 8px;
-      border-radius: 6px;
-      margin-left: 8px;
-      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 24px;
     }
 
-    /* Sets */
-    .sets-list {
+    .timer-controls {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .timer-adjust-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #1c1c1e;
+      color: var(--text-light);
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .timer-adjust-btn svg {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .skip-btn {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-light);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 14px;
+    }
+
+    /* Draggable White Sheet */
+    .sheet {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--sheet-bg);
+      color: var(--text-dark);
+      border-top-left-radius: 34px;
+      border-top-right-radius: 34px;
+      box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.45);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      transition: top 0.32s cubic-bezier(0.18, 0.89, 0.32, 1);
+      will-change: top;
+    }
+
+    /* Snap positions calculated in JS: collapsed, half, expanded */
+    .sheet.collapsed { top: calc(100vh - 200px); }
+    .sheet.half { top: 290px; }
+    .sheet.expanded { top: calc(54px + env(safe-area-inset-top, 0px)); }
+
+    .sheet-handle-bar {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      touch-action: none;
+      padding-top: 6px;
+    }
+
+    .sheet-handle {
+      width: 44px;
+      height: 5px;
+      background: #d1d1d6;
+      border-radius: 3px;
+    }
+
+    .sheet-content {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 4px 18px 80px;
+    }
+
+    /* Exercise Section in Sheet */
+    .exercise-block {
+      margin-bottom: 30px;
+    }
+
+    .exercise-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .exercise-name-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-red);
+      display: inline-block;
+    }
+
+    .exercise-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--text-dark);
+    }
+
+    .exercise-menu-btn {
+      background: #f2f2f7;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .exercise-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .rest-target-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hint-box {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    /* Sets Container */
+    .sets-container {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      margin-bottom: 12px;
     }
 
     .set-row {
@@ -169,104 +316,367 @@
       align-items: center;
       justify-content: space-between;
       padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
+      border-radius: 16px;
+      background: transparent;
+      transition: background 0.15s ease;
+    }
+
+    .set-row.active {
+      background: var(--sheet-card);
+    }
+
+    .set-inputs-left {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .input-val-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
       cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease;
     }
 
-    .set-row.completed {
-      background: rgba(48, 209, 88, 0.12);
-      border: 1px solid rgba(48, 209, 88, 0.3);
+    .input-number {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text-dark);
+      font-variant-numeric: tabular-nums;
+      border: none;
+      background: none;
+      width: 44px;
+      outline: none;
     }
 
-    .set-info {
+    .input-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .set-actions-right {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .set-number {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-muted);
-      width: 20px;
-    }
-
-    .set-row.completed .set-number {
-      color: var(--success);
-    }
-
-    .set-details {
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .set-check {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      border: 2px solid var(--text-muted);
+    .flame-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 149, 0, 0.12);
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--accent-orange);
     }
 
-    .set-row.completed .set-check {
-      background: var(--success);
-      border-color: var(--success);
+    .checkbox-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 2px solid #d1d1d6;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.3, 1.2, 0.4, 1);
     }
 
-    .set-check svg {
+    .checkbox-btn.checked {
+      background: var(--checkbox-checked);
+      border-color: var(--checkbox-checked);
+      transform: scale(1.05);
+    }
+
+    .checkbox-btn svg {
       display: none;
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       stroke: white;
       stroke-width: 3;
       fill: none;
     }
 
-    .set-row.completed .set-check svg {
+    .checkbox-btn.checked svg {
       display: block;
     }
 
-    /* Error / Empty State */
-    .empty-state {
+    .add-set-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--sheet-card);
+      color: var(--text-dark);
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* Finish Celebration Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .summary-card {
+      background: #18181c;
+      width: 100%;
+      max-width: 500px;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
+      padding: 28px 20px 44px;
+      color: white;
       text-align: center;
-      padding: 60px 20px;
-      background: var(--card-bg);
-      border-radius: 24px;
-      border: 1px solid var(--card-border);
+      animation: slideUp 0.35s cubic-bezier(0.18, 0.89, 0.32, 1);
     }
 
-    .empty-state h2 {
-      font-size: 20px;
-      margin-bottom: 8px;
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
 
-    .empty-state p {
-      font-size: 14px;
+    .trophy-badge {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff9500, #ff2d55);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(255, 149, 0, 0.3);
+    }
+
+    .summary-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .summary-subtitle {
+      font-size: 15px;
       color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 12px 8px;
+      border-radius: 16px;
+    }
+
+    .stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .export-notes-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #ff9500, #ff3b30);
+      color: white;
+      border: none;
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 20px rgba(255, 149, 0, 0.25);
+    }
+
+    .copy-text-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      color: white;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    .close-modal-btn {
+      font-size: 15px;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #2c2c2e;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 24px;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 200;
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
 <body>
-  <div class="container" id="app">
-    <div class="brand-badge"><span>●</span> REP WORKOUT</div>
-    
-    <div id="content">
-      <div class="empty-state">
-        <h2>Loading Split...</h2>
-        <p>Reading workout payload from link.</p>
-      </div>
+
+  <!-- Top Navigation Bar -->
+  <div class="top-nav">
+    <button class="nav-btn back-btn" onclick="toggleSheetPosition()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <div class="top-counter" id="topCounter">0 / 0</div>
+    <button class="nav-btn finish-btn" onclick="finishWorkout()">
+      <span class="watch-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+      </span>
+      <span>Finish</span>
+    </button>
+  </div>
+
+  <!-- Top Big Rest Timer Area -->
+  <div class="timer-area" id="timerArea">
+    <div class="big-timer" id="restTimerDisplay">0:00</div>
+    <div class="total-elapsed" id="totalElapsedDisplay">0:00</div>
+    <div class="timer-controls">
+      <button class="timer-adjust-btn" onclick="adjustRestTimer(-15)">
+        <svg viewBox="0 0 36 36"><path d="M18 4 A 14 14 0 1 0 32 18" stroke-dasharray="80" stroke-linecap="round"/></svg>
+        <span>-15</span>
+      </button>
+      <button class="skip-btn" onclick="skipRestTimer()">Skip</button>
+      <button class="timer-adjust-btn" onclick="adjustRestTimer(15)">
+        <svg viewBox="0 0 36 36" style="transform: scaleX(-1)"><path d="M18 4 A 14 14 0 1 0 32 18" stroke-dasharray="80" stroke-linecap="round"/></svg>
+        <span>+15</span>
+      </button>
     </div>
   </div>
 
+  <!-- Draggable Sheet -->
+  <div class="sheet half" id="bottomSheet">
+    <div class="sheet-handle-bar" id="dragHandle">
+      <div class="sheet-handle"></div>
+    </div>
+    <div class="sheet-content" id="sheetContent">
+      <!-- Exercises dynamically injected here -->
+    </div>
+  </div>
+
+  <!-- Workout Finished & Export to Apple Notes Modal -->
+  <div class="modal-overlay" id="finishModal">
+    <div class="summary-card">
+      <div class="trophy-badge">🏆</div>
+      <h2 class="summary-title" id="summaryTitle">Workout Finished!</h2>
+      <p class="summary-subtitle" id="summarySubtitle">Incredible work today.</p>
+
+      <div class="stats-grid">
+        <div class="stat-pill">
+          <div class="stat-val" id="summaryDuration">0m</div>
+          <div class="stat-lbl">Duration</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" id="summarySets">0</div>
+          <div class="stat-lbl">Sets</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-val" id="summaryVolume">0 kg</div>
+          <div class="stat-lbl">Volume</div>
+        </div>
+      </div>
+
+      <button class="export-notes-btn" onclick="exportToAppleNotes()">
+        <span>📝 Export to Apple Notes</span>
+      </button>
+
+      <button class="copy-text-btn" onclick="copyPlainText()">
+        <span>📋 Copy Plain Text</span>
+      </button>
+
+      <button class="close-modal-btn" onclick="closeFinishModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span id="toastMsg">Copied!</span>
+  </div>
+
   <script>
-    function getSplitDataFromUrl() {
-      // Check URL hash or query params (?data= or #data=)
+    // State
+    let splitData = null;
+    let workoutStartTime = Date.now();
+    let workoutTimerInterval = null;
+    let restTimeRemaining = 0;
+    let restTimerInterval = null;
+    let totalCompletedSets = 0;
+    let totalPlannedSets = 0;
+
+    // Sheet touch physics
+    const sheet = document.getElementById('bottomSheet');
+    const dragHandle = document.getElementById('dragHandle');
+    let startY = 0;
+    let currentY = 0;
+    let initialTop = 0;
+    let isDragging = false;
+    let sheetState = 'half'; // 'collapsed', 'half', 'expanded'
+
+    function initSplit() {
+      // Read #data= or ?data=
       let rawData = null;
       if (window.location.hash.includes('data=')) {
         rawData = window.location.hash.split('data=')[1];
@@ -275,105 +685,357 @@
         rawData = urlParams.get('data');
       }
 
-      if (!rawData) return null;
-
-      try {
-        // Base64URL to Base64
-        let base64 = rawData.replace(/-/g, '+').replace(/_/g, '/');
-        while (base64.length % 4) {
-          base64 += '=';
+      if (!rawData) {
+        // Fallback sample split for preview
+        splitData = {
+          name: "Push Day",
+          weightUnit: "kg",
+          exercises: [
+            {
+              name: "Dumbbell Alternate Bicep Curl",
+              equipment: "Dumbbell",
+              restSeconds: 180,
+              sets: [
+                { reps: 12, weight: 6, kind: "warmup" },
+                { reps: 8, weight: 12, kind: "working" },
+                { reps: 8, weight: 12, kind: "working" }
+              ]
+            },
+            {
+              name: "Wide-Grip Lat Pulldown",
+              equipment: "Cable",
+              restSeconds: 180,
+              sets: [
+                { reps: 12, weight: 30, kind: "warmup" },
+                { reps: 8, weight: 60, kind: "working" },
+                { reps: 8, weight: 60, kind: "working" }
+              ]
+            }
+          ]
+        };
+      } else {
+        try {
+          let base64 = rawData.replace(/-/g, '+').replace(/_/g, '/');
+          while (base64.length % 4) base64 += '=';
+          const jsonStr = decodeURIComponent(escape(atob(base64)));
+          const rawObj = JSON.parse(jsonStr);
+          
+          splitData = {
+            name: rawObj.n || rawObj.name || 'Workout',
+            weightUnit: rawObj.u || rawObj.weightUnit || 'kg',
+            exercises: (rawObj.e || rawObj.exercises || []).map(ex => ({
+              name: ex.n || ex.name || 'Exercise',
+              equipment: ex.e || ex.equipment || '',
+              restSeconds: ex.r || ex.restSeconds || 120,
+              sets: (ex.t || ex.sets || []).map(s => ({
+                reps: s.r !== undefined ? s.r : s.reps || 10,
+                weight: s.w !== undefined ? s.w : s.weight || 0,
+                kind: s.k || s.kind || 'working',
+                completed: false
+              }))
+            }))
+          };
+        } catch (e) {
+          console.error(e);
         }
-        const jsonStr = decodeURIComponent(escape(atob(base64)));
-        return JSON.parse(jsonStr);
-      } catch (err) {
-        console.error('Failed to parse split data:', err);
-        return null;
       }
+
+      renderExercises();
+      startWorkoutClock();
     }
 
-    function renderSplit() {
-      const split = getSplitDataFromUrl();
-      const contentEl = document.getElementById('content');
+    function renderExercises() {
+      const content = document.getElementById('sheetContent');
+      let html = '';
+      totalPlannedSets = 0;
+      totalCompletedSets = 0;
 
-      if (!split) {
-        contentEl.innerHTML = `
-          <div class="empty-state">
-            <h2>Invalid or Missing Split</h2>
-            <p>Scan a Rep QR code or click a shared split link to view today's workout.</p>
-          </div>
-        `;
-        return;
-      }
-
-      const splitName = split.n || split.name || 'Shared Workout';
-      const weightUnit = split.u || split.weightUnit || 'kg';
-      const exercises = split.e || split.exercises || [];
-      const dataParam = window.location.hash.includes('data=') ? window.location.hash.split('data=')[1] : new URLSearchParams(window.location.search).get('data');
-      const appDeepLink = `de.julian.rep://split/import?data=${dataParam}`;
-
-      let exercisesHtml = '';
-      exercises.forEach((ex, exIndex) => {
-        const exName = ex.n || ex.name || 'Exercise';
-        const restSec = ex.r || ex.restSeconds || 0;
-        const sets = ex.t || ex.sets || [];
+      splitData.exercises.forEach((ex, exIdx) => {
+        totalPlannedSets += ex.sets.length;
+        const restMin = Math.floor(ex.restSeconds / 60);
 
         let setsHtml = '';
-        sets.forEach((set, sIndex) => {
-          const reps = set.r || set.reps || 0;
-          const weight = set.w !== undefined ? set.w : set.weight || 0;
-          const setId = `set-${exIndex}-${sIndex}`;
+        ex.sets.forEach((set, sIdx) => {
+          if (set.completed) totalCompletedSets++;
+          const isWarmup = set.kind === 'warmup';
+          const isDone = set.completed;
 
           setsHtml += `
-            <div class="set-row" onclick="toggleSet('${setId}')" id="${setId}">
-              <div class="set-info">
-                <span class="set-number">${sIndex + 1}</span>
-                <span class="set-details">${reps} reps ${weight > 0 ? '· ' + weight + ' ' + weightUnit : ''}</span>
+            <div class="set-row ${isDone ? '' : 'active'}" id="set-row-${exIdx}-${sIdx}">
+              <div class="set-inputs-left">
+                <div class="input-val-group">
+                  <input type="number" class="input-number" value="${set.weight}" onchange="updateSetWeight(${exIdx}, ${sIdx}, this.value)" inputmode="decimal">
+                  <span class="input-label">${splitData.weightUnit}</span>
+                </div>
+                <div class="input-val-group">
+                  <input type="number" class="input-number" value="${set.reps}" onchange="updateSetReps(${exIdx}, ${sIdx}, this.value)" inputmode="numeric">
+                  <span class="input-label">reps</span>
+                </div>
               </div>
-              <div class="set-check">
-                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <div class="set-actions-right">
+                ${isWarmup ? `<button class="flame-btn">🔥</button>` : ''}
+                <button class="checkbox-btn ${isDone ? 'checked' : ''}" onclick="toggleSetComplete(${exIdx}, ${sIdx})">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </button>
               </div>
             </div>
           `;
         });
 
-        exercisesHtml += `
-          <div class="exercise-card">
-            <div class="exercise-header">
-              <span class="exercise-name">${exName}</span>
-              ${restSec > 0 ? `<span class="rest-badge">${Math.floor(restSec / 60)}:${(restSec % 60).toString().padStart(2, '0')} rest</span>` : ''}
+        html += `
+          <div class="exercise-block">
+            <div class="exercise-title-row">
+              <div class="exercise-name-wrap">
+                <span class="status-dot"></span>
+                <h3 class="exercise-title">${ex.name}</h3>
+              </div>
+              <button class="exercise-menu-btn">•••</button>
             </div>
-            <div class="sets-list">
+            <div class="exercise-meta-row">
+              <span>${ex.equipment || 'Exercise'}</span>
+              <span class="rest-target-badge">⏱ ${restMin}m</span>
+            </div>
+            <div class="sets-container" id="sets-list-${exIdx}">
               ${setsHtml}
             </div>
+            <button class="add-set-btn" onclick="addSet(${exIdx})">
+              <span>+ Add Set</span>
+            </button>
           </div>
         `;
       });
 
-      contentEl.innerHTML = `
-        <div class="header-card">
-          <h1 class="split-title">${splitName}</h1>
-          <div class="split-meta">
-            <span class="meta-pill">${exercises.length} Exercises</span>
-            <span class="meta-pill">${weightUnit.toUpperCase()}</span>
-          </div>
-          <a href="${appDeepLink}" class="open-app-btn">
-            <span>Open in Rep App</span>
-          </a>
-        </div>
-
-        <div class="section-title">Today's Exercises</div>
-        ${exercisesHtml}
-      `;
+      content.innerHTML = html;
+      updateTopCounter();
     }
 
-    function toggleSet(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.classList.toggle('completed');
+    function toggleSetComplete(exIdx, sIdx) {
+      const set = splitData.exercises[exIdx].sets[sIdx];
+      set.completed = !set.completed;
+
+      // Haptic feedback
+      if (navigator.vibrate) navigator.vibrate(40);
+
+      if (set.completed) {
+        startRestTimer(splitData.exercises[exIdx].restSeconds || 120);
+        // Slide sheet down slightly to half view so user sees countdown
+        snapSheet('half');
+      }
+
+      renderExercises();
+    }
+
+    function updateSetWeight(exIdx, sIdx, val) {
+      splitData.exercises[exIdx].sets[sIdx].weight = parseFloat(val) || 0;
+    }
+
+    function updateSetReps(exIdx, sIdx, val) {
+      splitData.exercises[exIdx].sets[sIdx].reps = parseInt(val, 10) || 0;
+    }
+
+    function addSet(exIdx) {
+      const sets = splitData.exercises[exIdx].sets;
+      const lastSet = sets[sets.length - 1] || { reps: 10, weight: 20 };
+      sets.push({
+        reps: lastSet.reps,
+        weight: lastSet.weight,
+        kind: 'working',
+        completed: false
+      });
+      renderExercises();
+    }
+
+    function updateTopCounter() {
+      document.getElementById('topCounter').innerText = `${totalCompletedSets} / ${totalPlannedSets}`;
+    }
+
+    // Workout Clock
+    function startWorkoutClock() {
+      if (workoutTimerInterval) clearInterval(workoutTimerInterval);
+      workoutTimerInterval = setInterval(() => {
+        const elapsedSec = Math.floor((Date.now() - workoutStartTime) / 1000);
+        const mins = Math.floor(elapsedSec / 60);
+        const secs = elapsedSec % 60;
+        document.getElementById('totalElapsedDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    // Rest Timer
+    function startRestTimer(seconds) {
+      restTimeRemaining = seconds;
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      updateRestTimerDisplay();
+
+      restTimerInterval = setInterval(() => {
+        restTimeRemaining--;
+        if (restTimeRemaining <= 0) {
+          clearInterval(restTimerInterval);
+          restTimeRemaining = 0;
+          if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        }
+        updateRestTimerDisplay();
+      }, 1000);
+    }
+
+    function updateRestTimerDisplay() {
+      const mins = Math.floor(restTimeRemaining / 60);
+      const secs = restTimeRemaining % 60;
+      document.getElementById('restTimerDisplay').innerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function adjustRestTimer(delta) {
+      restTimeRemaining = Math.max(0, restTimeRemaining + delta);
+      updateRestTimerDisplay();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function skipRestTimer() {
+      restTimeRemaining = 0;
+      if (restTimerInterval) clearInterval(restTimerInterval);
+      updateRestTimerDisplay();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    // Sheet Touch Dragging & Snap points
+    dragHandle.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+      initialTop = sheet.getBoundingClientRect().top;
+      isDragging = true;
+      sheet.style.transition = 'none';
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentY = e.touches[0].clientY;
+      const deltaY = currentY - startY;
+      let newTop = initialTop + deltaY;
+      const minTop = 60;
+      const maxTop = window.innerHeight - 160;
+      if (newTop < minTop) newTop = minTop;
+      if (newTop > maxTop) newTop = maxTop;
+      sheet.style.top = `${newTop}px`;
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      sheet.style.transition = 'top 0.32s cubic-bezier(0.18, 0.89, 0.32, 1)';
+      
+      const currentTop = sheet.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+
+      if (currentTop < 180) {
+        snapSheet('expanded');
+      } else if (currentTop > windowHeight - 260) {
+        snapSheet('collapsed');
+      } else {
+        snapSheet('half');
+      }
+    });
+
+    function snapSheet(state) {
+      sheetState = state;
+      sheet.className = `sheet ${state}`;
+      sheet.style.top = '';
+    }
+
+    function toggleSheetPosition() {
+      if (sheetState === 'expanded') snapSheet('half');
+      else snapSheet('expanded');
+    }
+
+    // Finish & Export to Apple Notes
+    function finishWorkout() {
+      const elapsedSec = Math.floor((Date.now() - workoutStartTime) / 1000);
+      const mins = Math.max(1, Math.floor(elapsedSec / 60));
+      
+      let totalVol = 0;
+      splitData.exercises.forEach(ex => {
+        ex.sets.forEach(s => {
+          if (s.completed) {
+            totalVol += (s.weight * s.reps);
+          }
+        });
+      });
+
+      document.getElementById('summaryTitle').innerText = splitData.name;
+      document.getElementById('summaryDuration').innerText = `${mins}m`;
+      document.getElementById('summarySets').innerText = `${totalCompletedSets}`;
+      document.getElementById('summaryVolume').innerText = `${totalVol.toLocaleString()} ${splitData.weightUnit}`;
+      document.getElementById('finishModal').classList.add('open');
+    }
+
+    function closeFinishModal() {
+      document.getElementById('finishModal').classList.remove('open');
+    }
+
+    function buildWorkoutPlainText() {
+      const dateStr = new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      const elapsedSec = Math.floor((Date.now() - workoutStartTime) / 1000);
+      const mins = Math.max(1, Math.floor(elapsedSec / 60));
+      
+      let totalVol = 0;
+      splitData.exercises.forEach(ex => {
+        ex.sets.forEach(s => {
+          if (s.completed) totalVol += (s.weight * s.reps);
+        });
+      });
+
+      let text = `🏋️ ${splitData.name}\n`;
+      text += `📅 ${dateStr} · ⏱ ${mins} min · ${totalCompletedSets} sets · ⚡ ${totalVol.toLocaleString()} ${splitData.weightUnit}\n\n`;
+
+      splitData.exercises.forEach((ex, exIdx) => {
+        const completedSets = ex.sets.filter(s => s.completed);
+        const countStr = completedSets.length > 0 ? `${completedSets.length} sets` : `${ex.sets.length} sets`;
+        text += `${exIdx + 1}. ${ex.name} (${countStr})\n`;
+        
+        ex.sets.forEach((s, sIdx) => {
+          const checkMark = s.completed ? '✓' : '•';
+          const warmupStr = s.kind === 'warmup' ? ' (Warmup 🔥)' : '';
+          text += `   ${checkMark} Set ${sIdx + 1}: ${s.reps} reps @ ${s.weight} ${splitData.weightUnit}${warmupStr}\n`;
+        });
+        text += `\n`;
+      });
+
+      text += `Tracked with Rep ⚡\n`;
+      return text;
+    }
+
+    async function exportToAppleNotes() {
+      const text = buildWorkoutPlainText();
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `${splitData.name} - Workout Notes`,
+            text: text
+          });
+        } catch (err) {
+          copyPlainText();
+        }
+      } else {
+        copyPlainText();
       }
     }
 
-    renderSplit();
+    function copyPlainText() {
+      const text = buildWorkoutPlainText();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Workout copied to clipboard!');
+      }).catch(() => {
+        showToast('Failed to copy');
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2400);
+    }
+
+    initSplit();
   </script>
 </body>
 </html>
