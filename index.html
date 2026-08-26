@@ -54,12 +54,19 @@
       align-items: center;
       justify-content: center;
       z-index: 100;
-      text-decoration: none;
+    }
+
+    .landing-content-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
     }
 
     .cursive-brand-title {
       font-family: 'Dancing Script', 'Snell Roundhand', 'Apple Chancery', 'Brush Script MT', cursive;
-      font-size: 82px;
+      font-size: 88px;
       font-weight: 700;
       font-style: italic;
       color: #ffffff;
@@ -71,6 +78,29 @@
     @keyframes floatIn {
       from { opacity: 0; transform: scale(0.92) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Apple-Style TestFlight Button (Clean, solid, no gradients) */
+    .testflight-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #ffffff;
+      color: #000000;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 30px;
+      margin-top: 32px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      box-shadow: 0 4px 24px rgba(255, 255, 255, 0.2);
+    }
+
+    .testflight-btn:active {
+      transform: scale(0.97);
+      opacity: 0.9;
     }
 
     /* Top Navigation Bar */
@@ -102,19 +132,15 @@
     }
 
     .download-app-btn {
-      color: var(--accent-blue);
-      background: rgba(10, 132, 255, 0.12);
-      border-color: rgba(10, 132, 255, 0.3);
+      color: var(--text-light);
+      background: #1c1c1e;
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .download-app-btn svg {
-      width: 17px;
-      height: 17px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2.4;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
     }
 
     .top-counter {
@@ -509,8 +535,8 @@
       width: 100%;
       height: 48px;
       border-radius: 24px;
-      background: linear-gradient(135deg, #30d158, #28a745);
-      color: white;
+      background: #ffffff;
+      color: #000000;
       font-size: 16px;
       font-weight: 700;
       border: none;
@@ -599,7 +625,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .comp-pill {
@@ -618,21 +644,21 @@
       color: var(--accent-red);
     }
 
-    /* Muscle Anatomy Heatmap */
+    /* Muscle Anatomy Heatmap (Official Wger SVGs) */
     .anatomy-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      margin: 10px 0 28px;
-      min-height: 240px;
+      gap: 20px;
+      margin: 10px 0 24px;
+      min-height: 250px;
       position: relative;
     }
 
     .anatomy-figure {
       position: relative;
       width: 140px;
-      height: 240px;
+      height: 250px;
     }
 
     .anatomy-figure img {
@@ -644,8 +670,8 @@
     }
 
     .anatomy-base {
-      opacity: 0.35;
-      filter: grayscale(1) contrast(1.1);
+      opacity: 0.32;
+      filter: grayscale(1) contrast(1.1) brightness(0.75);
     }
 
     .anatomy-layer {
@@ -654,15 +680,16 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      opacity: 0.9;
     }
 
     .anatomy-layer.primary {
       filter: brightness(0) saturate(100%) invert(58%) sepia(85%) saturate(2200%) hue-rotate(360deg) brightness(102%) contrast(105%);
+      opacity: 0.95;
     }
 
     .anatomy-layer.secondary {
       filter: brightness(0) saturate(100%) invert(45%) sepia(98%) saturate(4532%) hue-rotate(201deg) brightness(104%) contrast(101%);
+      opacity: 0.88;
     }
 
     .completion-bottom-btn {
@@ -708,13 +735,23 @@
 
   <!-- MINIMAL CURSIVE LANDING PAGE (Shown when no workout data or after finishing) -->
   <div class="blank-landing-page" id="blankLandingPage" style="display: none;">
-    <div class="cursive-brand-title">Rep</div>
+    <div class="landing-content-wrap">
+      <div class="cursive-brand-title">Rep</div>
+      <a href="https://testflight.apple.com/join/juxSXXRQ" target="_blank" rel="noopener noreferrer" class="testflight-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.66-1.06 1.73-.93 2.76 1.01.08 2.02-.51 2.64-1.26z"/>
+        </svg>
+        <span>Download on TestFlight</span>
+      </a>
+    </div>
   </div>
 
   <!-- Top Navigation Bar -->
   <div class="top-nav" id="topNav">
-    <a href="de.julian.rep://split/import" class="nav-btn download-app-btn" id="downloadAppBtn">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    <a href="https://testflight.apple.com/join/juxSXXRQ" target="_blank" rel="noopener noreferrer" class="nav-btn download-app-btn" id="downloadAppBtn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.66-1.06 1.73-.93 2.76 1.01.08 2.02-.51 2.64-1.26z"/>
+      </svg>
       <span>Get Rep</span>
     </a>
     <div class="top-counter" id="topCounter">0 / 0</div>
@@ -797,14 +834,14 @@
       </div>
     </div>
 
-    <!-- Body Anatomy Heatmap (Front & Back) -->
+    <!-- Body Anatomy Heatmap (Official Wger SVGs) -->
     <div class="anatomy-container" id="anatomyContainer">
       <div class="anatomy-figure">
-        <img class="anatomy-base" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscular_system_front.svg" alt="Front Anatomy">
+        <img class="anatomy-base" src="https://raw.githubusercontent.com/wger-project/wger/master/wger/core/static/images/muscles/muscular_system_front.svg" alt="Front Anatomy">
         <div id="frontMuscleLayers"></div>
       </div>
       <div class="anatomy-figure">
-        <img class="anatomy-base" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscular_system_back.svg" alt="Back Anatomy">
+        <img class="anatomy-base" src="https://raw.githubusercontent.com/wger-project/wger/master/wger/core/static/images/muscles/muscular_system_back.svg" alt="Back Anatomy">
         <div id="backMuscleLayers"></div>
       </div>
     </div>
@@ -847,7 +884,7 @@
         rawData = urlParams.get('data');
       }
 
-      // If no workout data is provided in the URL, display the blank landing page with cursive 'Rep'
+      // If no workout data is provided in the URL, display the blank landing page with cursive 'Rep' & TestFlight button
       if (!rawData) {
         showBlankLandingPage();
         return;
@@ -875,7 +912,6 @@
           }))
         };
         
-        document.getElementById('downloadAppBtn').href = `de.julian.rep://split/import?data=${rawData}`;
         renderExercises();
         startWorkoutClock();
       } catch (e) {
@@ -1099,7 +1135,7 @@
       finishWorkout();
     }
 
-    // Fullscreen Completion & Dynamic Heatmap
+    // Fullscreen Completion & Heatmap (Official Wger SVGs)
     function finishWorkout() {
       if (workoutTimerInterval) clearInterval(workoutTimerInterval);
       if (restTimerInterval) clearInterval(restTimerInterval);
@@ -1126,63 +1162,75 @@
     function renderAnatomyHeatmap() {
       const frontEl = document.getElementById('frontMuscleLayers');
       const backEl = document.getElementById('backMuscleLayers');
-      
-      // Analyze active muscles based on workout names
-      const muscleIDs = new Set();
+      const root = "https://raw.githubusercontent.com/wger-project/wger/master/wger/core/static/images/muscles";
+
+      const muscleIDs = [];
       const text = splitData.exercises.map(e => e.name.toLowerCase()).join(' ');
 
       if (text.includes('bench') || text.includes('chest') || text.includes('push') || text.includes('fly') || text.includes('dip')) {
-        muscleIDs.add({ id: 4, role: 'primary' }); // Chest
-        muscleIDs.add({ id: 2, role: 'secondary' }); // Deltoids
-        muscleIDs.add({ id: 5, role: 'secondary' }); // Triceps
+        muscleIDs.push({ id: 4, isPrimary: true }); // Chest
+        muscleIDs.push({ id: 2, isPrimary: false }); // Deltoids
+        muscleIDs.push({ id: 5, isPrimary: false }); // Triceps
       }
       if (text.includes('bicep') || text.includes('curl')) {
-        muscleIDs.add({ id: 1, role: 'primary' }); // Biceps
-        muscleIDs.add({ id: 13, role: 'secondary' }); // Forearms
+        muscleIDs.push({ id: 1, isPrimary: true }); // Biceps
+        muscleIDs.push({ id: 13, isPrimary: false }); // Forearms
       }
       if (text.includes('lat') || text.includes('pull') || text.includes('row') || text.includes('chin')) {
-        muscleIDs.add({ id: 12, role: 'primary' }); // Lats
-        muscleIDs.add({ id: 9, role: 'secondary' }); // Traps
+        muscleIDs.push({ id: 12, isPrimary: true }); // Lats
+        muscleIDs.push({ id: 9, isPrimary: false }); // Traps
       }
       if (text.includes('squat') || text.includes('leg') || text.includes('quad') || text.includes('extension')) {
-        muscleIDs.add({ id: 10, role: 'primary' }); // Quads
-        muscleIDs.add({ id: 8, role: 'primary' }); // Glutes
-        muscleIDs.add({ id: 7, role: 'secondary' }); // Calves
+        muscleIDs.push({ id: 10, isPrimary: true }); // Quads
+        muscleIDs.push({ id: 8, isPrimary: true }); // Glutes
+        muscleIDs.push({ id: 7, isPrimary: false }); // Calves
       }
       if (text.includes('hamstring') || text.includes('deadlift') || text.includes('rdl')) {
-        muscleIDs.add({ id: 11, role: 'primary' }); // Hamstrings
-        muscleIDs.add({ id: 8, role: 'secondary' }); // Glutes
+        muscleIDs.push({ id: 11, isPrimary: true }); // Hamstrings
+        muscleIDs.push({ id: 8, isPrimary: false }); // Glutes
       }
       if (text.includes('shoulder') || text.includes('overhead') || text.includes('lateral') || text.includes('raise')) {
-        muscleIDs.add({ id: 2, role: 'primary' }); // Deltoids
-        muscleIDs.add({ id: 5, role: 'secondary' }); // Triceps
+        muscleIDs.push({ id: 2, isPrimary: true }); // Deltoids
+        muscleIDs.push({ id: 5, isPrimary: false }); // Triceps
       }
       if (text.includes('abs') || text.includes('crunch') || text.includes('core')) {
-        muscleIDs.add({ id: 6, role: 'primary' }); // Abs
-        muscleIDs.add({ id: 14, role: 'secondary' }); // Obliques
+        muscleIDs.push({ id: 6, isPrimary: true }); // Abs
+        muscleIDs.push({ id: 14, isPrimary: false }); // Obliques
       }
 
       // Default fallback if no specific keywords matched
-      if (muscleIDs.size === 0) {
-        muscleIDs.add({ id: 4, role: 'primary' });
-        muscleIDs.add({ id: 10, role: 'primary' });
-        muscleIDs.add({ id: 12, role: 'primary' });
-        muscleIDs.add({ id: 8, role: 'primary' });
+      if (muscleIDs.length === 0) {
+        muscleIDs.push({ id: 4, isPrimary: true });
+        muscleIDs.push({ id: 10, isPrimary: true });
+        muscleIDs.push({ id: 12, isPrimary: true });
+        muscleIDs.push({ id: 8, isPrimary: true });
       }
 
-      const frontIDs = [1, 2, 3, 4, 6, 7, 10, 13, 14];
-      const backIDs = [2, 5, 7, 8, 9, 11, 12, 15];
+      const frontIDs = [1, 2, 3, 4, 6, 10, 13, 14];
+      const backIDs = [5, 7, 8, 9, 11, 12, 15];
 
       let frontHtml = '';
       let backHtml = '';
 
+      const seen = new Set();
+      const uniqueMuscles = [];
       muscleIDs.forEach(m => {
-        const url = `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-${m.id}.svg`;
+        if (!seen.has(m.id)) {
+          seen.add(m.id);
+          uniqueMuscles.push(m);
+        }
+      });
+
+      uniqueMuscles.forEach(m => {
+        const folder = m.isPrimary ? 'main' : 'secondary';
+        const roleClass = m.isPrimary ? 'primary' : 'secondary';
+        const imgUrl = `${root}/${folder}/muscle-${m.id}.svg`;
+        
         if (frontIDs.includes(m.id)) {
-          frontHtml += `<img class="anatomy-layer ${m.role}" src="${url}" alt="Muscle ${m.id}">`;
+          frontHtml += `<img class="anatomy-layer ${roleClass}" src="${imgUrl}" alt="Muscle ${m.id}">`;
         }
         if (backIDs.includes(m.id)) {
-          backHtml += `<img class="anatomy-layer ${m.role}" src="${url}" alt="Muscle ${m.id}">`;
+          backHtml += `<img class="anatomy-layer ${roleClass}" src="${imgUrl}" alt="Muscle ${m.id}">`;
         }
       });
 
