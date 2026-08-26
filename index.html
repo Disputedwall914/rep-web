@@ -45,7 +45,7 @@
       flex-direction: column;
     }
 
-    /* MINIMAL CURSIVE LANDING PAGE (Default when no data or after finishing) */
+    /* MINIMAL CURSIVE LANDING PAGE */
     .blank-landing-page {
       position: fixed;
       inset: 0;
@@ -80,7 +80,7 @@
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* Apple-Style TestFlight Button (Clean, solid, no gradients) */
+    /* Apple-Style TestFlight Button */
     .testflight-btn {
       display: inline-flex;
       align-items: center;
@@ -262,8 +262,7 @@
       will-change: top;
     }
 
-    /* Snap positions: collapsed, half, expanded */
-    .sheet.collapsed { top: calc(100vh - 170px); }
+    /* Strict Clamped States: Cannot be dragged all the way down */
     .sheet.half { top: 315px; }
     .sheet.expanded { top: calc(52px + env(safe-area-inset-top, 0px)); }
 
@@ -289,7 +288,60 @@
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 6px 18px 80px;
+      padding: 6px 18px 100px;
+      position: relative;
+    }
+
+    /* Pull-to-add Exercise Indicator */
+    .pull-indicator-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px 0 10px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .pull-circle-svg {
+      width: 36px;
+      height: 36px;
+      transform: rotate(-90deg);
+    }
+
+    .pull-circle-bg {
+      fill: none;
+      stroke: #e5e5ea;
+      stroke-width: 3;
+    }
+
+    .pull-circle-fill {
+      fill: none;
+      stroke: var(--accent-blue);
+      stroke-width: 3;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.1s ease;
+    }
+
+    .add-exercise-main-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      background: #f2f2f7;
+      color: #000000;
+      border: 1px dashed #d1d1d6;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      margin-top: 16px;
     }
 
     /* Exercise Section in Sheet */
@@ -368,7 +420,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 14px;
+      padding: 10px 14px;
       border-radius: 16px;
       background: transparent;
       transition: background 0.15s ease;
@@ -381,14 +433,14 @@
     .set-inputs-left {
       display: flex;
       align-items: baseline;
-      gap: 20px;
+      gap: 18px;
       flex: 1;
     }
 
     .input-val-group {
       display: flex;
       align-items: baseline;
-      gap: 6px;
+      gap: 5px;
     }
 
     .input-number {
@@ -404,7 +456,7 @@
     }
 
     .input-label {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-muted);
     }
@@ -412,21 +464,37 @@
     .set-actions-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .flame-btn {
-      width: 32px;
-      height: 32px;
+    /* Set Type Badge / Switcher */
+    .set-type-badge {
+      padding: 5px 9px;
       border-radius: 8px;
-      background: rgba(255, 149, 0, 0.12);
       border: none;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      cursor: pointer;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text-muted);
+    }
+
+    .set-type-badge.warmup {
+      background: rgba(255, 149, 0, 0.14);
       color: var(--accent-orange);
+    }
+
+    .set-type-badge.drop {
+      background: rgba(10, 132, 255, 0.14);
+      color: var(--accent-blue);
+    }
+
+    .set-type-badge.failure {
+      background: rgba(255, 69, 58, 0.14);
+      color: var(--accent-red);
     }
 
     .checkbox-btn {
@@ -475,6 +543,141 @@
       justify-content: center;
       gap: 6px;
       cursor: pointer;
+    }
+
+    /* EXERCISE SEARCH & ADD MODAL (Rep Library) */
+    .library-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 90;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .library-modal-overlay.open {
+      display: flex;
+    }
+
+    .library-card {
+      background: #ffffff;
+      color: #000000;
+      width: 100%;
+      max-width: 500px;
+      height: 85vh;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px 30px;
+      animation: slideUpModal 0.3s cubic-bezier(0.18, 0.89, 0.32, 1);
+    }
+
+    @keyframes slideUpModal {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .library-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .library-title {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .library-search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f2f2f7;
+      padding: 12px 14px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+
+    .library-search-box input {
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 16px;
+      font-weight: 500;
+      width: 100%;
+      color: #000;
+    }
+
+    .library-categories {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .lib-cat-pill {
+      padding: 6px 14px;
+      border-radius: 14px;
+      background: #f2f2f7;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .lib-cat-pill.active {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .library-list {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lib-exercise-item {
+      padding: 12px 14px;
+      background: #f2f2f7;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .lib-exercise-item:active {
+      background: #e5e5ea;
+    }
+
+    .lib-item-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .lib-item-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .lib-add-icon {
+      font-size: 20px;
+      color: var(--accent-blue);
+      font-weight: bold;
     }
 
     /* CONFIRMATION DIALOG */
@@ -733,7 +936,7 @@
 </head>
 <body>
 
-  <!-- MINIMAL CURSIVE LANDING PAGE (Shown when no workout data or after finishing) -->
+  <!-- MINIMAL CURSIVE LANDING PAGE -->
   <div class="blank-landing-page" id="blankLandingPage" style="display: none;">
     <div class="landing-content-wrap">
       <div class="cursive-brand-title">Rep</div>
@@ -763,30 +966,72 @@
     </button>
   </div>
 
-  <!-- Top Big Rest Timer Area -->
+  <!-- Top Big Rest Timer Area (Swapped: +15s on Left, -15s on Right) -->
   <div class="timer-area" id="timerArea">
     <div class="big-timer" id="restTimerDisplay">0:00</div>
     <div class="total-elapsed" id="totalElapsedDisplay">0:00</div>
     <div class="timer-controls">
-      <button class="timer-adjust-btn" onclick="adjustRestTimer(-15)">
-        <svg viewBox="0 0 36 36"><path d="M18 4 A 14 14 0 1 0 32 18" stroke-dasharray="80" stroke-linecap="round"/></svg>
-        <span>-15</span>
-      </button>
-      <button class="skip-btn" onclick="skipRestTimer()">Skip</button>
       <button class="timer-adjust-btn" onclick="adjustRestTimer(15)">
         <svg viewBox="0 0 36 36" style="transform: scaleX(-1)"><path d="M18 4 A 14 14 0 1 0 32 18" stroke-dasharray="80" stroke-linecap="round"/></svg>
         <span>+15</span>
       </button>
+      <button class="skip-btn" onclick="skipRestTimer()">Skip</button>
+      <button class="timer-adjust-btn" onclick="adjustRestTimer(-15)">
+        <svg viewBox="0 0 36 36"><path d="M18 4 A 14 14 0 1 0 32 18" stroke-dasharray="80" stroke-linecap="round"/></svg>
+        <span>-15</span>
+      </button>
     </div>
   </div>
 
-  <!-- Draggable Bottom Sheet -->
+  <!-- Draggable Bottom Sheet (Clamped: Only 'half' and 'expanded') -->
   <div class="sheet half" id="bottomSheet">
     <div class="sheet-handle-bar" id="dragHandle">
       <div class="sheet-handle"></div>
     </div>
     <div class="sheet-content" id="sheetContent">
-      <!-- Exercises dynamically injected -->
+      <div id="exercisesContainer"></div>
+      
+      <!-- Pull-to-add Exercise Indicator at Bottom -->
+      <div class="pull-indicator-wrap" id="pullIndicatorWrap">
+        <svg class="pull-circle-svg" viewBox="0 0 36 36">
+          <circle class="pull-circle-bg" cx="18" cy="18" r="15.915"></circle>
+          <circle class="pull-circle-fill" id="pullCircleFill" cx="18" cy="18" r="15.915"></circle>
+        </svg>
+        <span id="pullIndicatorText">Scroll down to add exercise</span>
+      </div>
+
+      <button class="add-exercise-main-btn" onclick="openExerciseLibrary()">
+        <span>＋ Add Exercise from Rep Library</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- EXERCISE LIBRARY SEARCH MODAL (Rep / GitHub Database) -->
+  <div class="library-modal-overlay" id="libraryModal">
+    <div class="library-card">
+      <div class="library-header">
+        <h3 class="library-title">Add Exercise</h3>
+        <button class="comp-action-btn" onclick="closeExerciseLibrary()">✕</button>
+      </div>
+
+      <div class="library-search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="librarySearchInput" placeholder="Search Rep exercise library..." oninput="filterLibraryExercises(this.value)">
+      </div>
+
+      <div class="library-categories">
+        <button class="lib-cat-pill active" onclick="selectLibraryCategory('all', this)">All</button>
+        <button class="lib-cat-pill" onclick="selectLibraryCategory('chest', this)">Chest</button>
+        <button class="lib-cat-pill" onclick="selectLibraryCategory('back', this)">Back</button>
+        <button class="lib-cat-pill" onclick="selectLibraryCategory('legs', this)">Legs</button>
+        <button class="lib-cat-pill" onclick="selectLibraryCategory('shoulders', this)">Shoulders</button>
+        <button class="lib-cat-pill" onclick="selectLibraryCategory('arms', this)">Arms</button>
+        <button class="lib-cat-pill" onclick="selectLibraryCategory('core', this)">Core</button>
+      </div>
+
+      <div class="library-list" id="libraryList">
+        <!-- Dynamically injected exercise items -->
+      </div>
     </div>
   </div>
 
@@ -866,16 +1111,27 @@
     let totalCompletedSets = 0;
     let totalPlannedSets = 0;
 
-    // Sheet touch physics
+    // Rep Exercise Library Cache
+    let repCatalog = [];
+    let selectedCategory = 'all';
+
+    // Sheet touch physics (Clamped strictly to half and expanded)
     const sheet = document.getElementById('bottomSheet');
     const dragHandle = document.getElementById('dragHandle');
+    const sheetContent = document.getElementById('sheetContent');
     let startY = 0;
     let currentY = 0;
     let initialTop = 0;
     let isDragging = false;
-    let sheetState = 'half';
+    let sheetState = 'half'; // 'half' (315px) or 'expanded' (52px)
+
+    // Pull down to add exercise state
+    let pullStartY = 0;
+    let isPullingBottom = false;
 
     function initSplit() {
+      loadRepExerciseCatalog();
+
       let rawData = null;
       if (window.location.hash.includes('data=')) {
         rawData = window.location.hash.split('data=')[1];
@@ -884,7 +1140,6 @@
         rawData = urlParams.get('data');
       }
 
-      // If no workout data is provided in the URL, display the blank landing page with cursive 'Rep' & TestFlight button
       if (!rawData) {
         showBlankLandingPage();
         return;
@@ -929,7 +1184,7 @@
     }
 
     function renderExercises() {
-      const content = document.getElementById('sheetContent');
+      const container = document.getElementById('exercisesContainer');
       let html = '';
       totalPlannedSets = 0;
       totalCompletedSets = 0;
@@ -941,8 +1196,14 @@
         let setsHtml = '';
         ex.sets.forEach((set, sIdx) => {
           if (set.completed) totalCompletedSets++;
-          const isWarmup = set.kind === 'warmup';
           const isDone = set.completed;
+          const kind = set.kind || 'working';
+
+          let kindBadgeText = 'W';
+          if (kind === 'warmup') kindBadgeText = '🔥 Warmup';
+          else if (kind === 'drop') kindBadgeText = '💧 Drop';
+          else if (kind === 'failure') kindBadgeText = '⚡ Failure';
+          else kindBadgeText = `${sIdx + 1}`;
 
           setsHtml += `
             <div class="set-row ${isDone ? '' : 'active'}" id="set-row-${exIdx}-${sIdx}">
@@ -957,7 +1218,9 @@
                 </div>
               </div>
               <div class="set-actions-right">
-                ${isWarmup ? `<button class="flame-btn">🔥</button>` : ''}
+                <button class="set-type-badge ${kind}" onclick="cycleSetKind(${exIdx}, ${sIdx})">
+                  ${kindBadgeText}
+                </button>
                 <button class="checkbox-btn ${isDone ? 'checked' : ''}" onclick="toggleSetComplete(${exIdx}, ${sIdx})">
                   <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </button>
@@ -973,7 +1236,7 @@
                 <span class="status-dot"></span>
                 <h3 class="exercise-title">${ex.name}</h3>
               </div>
-              <button class="exercise-menu-btn">•••</button>
+              <button class="exercise-menu-btn" onclick="removeExercise(${exIdx})">✕</button>
             </div>
             <div class="exercise-meta-row">
               <span>${ex.equipment || 'Exercise'}</span>
@@ -989,8 +1252,18 @@
         `;
       });
 
-      content.innerHTML = html;
+      container.innerHTML = html;
       updateTopCounter();
+    }
+
+    // Set Types: working -> warmup -> drop -> failure
+    function cycleSetKind(exIdx, sIdx) {
+      const set = splitData.exercises[exIdx].sets[sIdx];
+      const order = ['working', 'warmup', 'drop', 'failure'];
+      const nextIndex = (order.indexOf(set.kind || 'working') + 1) % order.length;
+      set.kind = order[nextIndex];
+      if (navigator.vibrate) navigator.vibrate(20);
+      renderExercises();
     }
 
     function toggleSetComplete(exIdx, sIdx) {
@@ -1017,14 +1290,21 @@
 
     function addSet(exIdx) {
       const sets = splitData.exercises[exIdx].sets;
-      const lastSet = sets[sets.length - 1] || { reps: 10, weight: 20 };
+      const lastSet = sets[sets.length - 1] || { reps: 10, weight: 20, kind: 'working' };
       sets.push({
         reps: lastSet.reps,
         weight: lastSet.weight,
-        kind: 'working',
+        kind: lastSet.kind || 'working',
         completed: false
       });
       renderExercises();
+    }
+
+    function removeExercise(exIdx) {
+      if (confirm(`Remove ${splitData.exercises[exIdx].name}?`)) {
+        splitData.exercises.splice(exIdx, 1);
+        renderExercises();
+      }
     }
 
     function updateTopCounter() {
@@ -1078,7 +1358,7 @@
       if (navigator.vibrate) navigator.vibrate(20);
     }
 
-    // Dragging & Snapping
+    // Sheet Touch Dragging Clamped strictly: No dragging all the way down
     dragHandle.addEventListener('touchstart', (e) => {
       startY = e.touches[0].clientY;
       initialTop = sheet.getBoundingClientRect().top;
@@ -1092,7 +1372,7 @@
       const deltaY = currentY - startY;
       let newTop = initialTop + deltaY;
       const minTop = 52;
-      const maxTop = window.innerHeight - 150;
+      const maxTop = 315; // Clamped at half height
       if (newTop < minTop) newTop = minTop;
       if (newTop > maxTop) newTop = maxTop;
       sheet.style.top = `${newTop}px`;
@@ -1104,12 +1384,8 @@
       sheet.style.transition = 'top 0.32s cubic-bezier(0.18, 0.89, 0.32, 1)';
       
       const currentTop = sheet.getBoundingClientRect().top;
-      const windowHeight = window.innerHeight;
-
-      if (currentTop < 190) {
+      if (currentTop < 185) {
         snapSheet('expanded');
-      } else if (currentTop > windowHeight - 220) {
-        snapSheet('collapsed');
       } else {
         snapSheet('half');
       }
@@ -1119,6 +1395,162 @@
       sheetState = state;
       sheet.className = `sheet ${state}`;
       sheet.style.top = '';
+    }
+
+    // Pull bottom overscroll to add exercise
+    sheetContent.addEventListener('touchstart', (e) => {
+      const atBottom = (sheetContent.scrollHeight - sheetContent.scrollTop - sheetContent.clientHeight) < 10;
+      if (atBottom) {
+        pullStartY = e.touches[0].clientY;
+        isPullingBottom = true;
+      }
+    }, { passive: true });
+
+    sheetContent.addEventListener('touchmove', (e) => {
+      if (!isPullingBottom) return;
+      const currentTouchY = e.touches[0].clientY;
+      const pullDelta = pullStartY - currentTouchY;
+      if (pullDelta > 0) {
+        const progress = Math.min(100, (pullDelta / 90) * 100);
+        document.getElementById('pullCircleFill').style.strokeDashoffset = 100 - progress;
+        if (progress >= 100) {
+          document.getElementById('pullIndicatorText').innerText = "Release to add exercise!";
+        } else {
+          document.getElementById('pullIndicatorText').innerText = "Keep pulling to add exercise";
+        }
+      }
+    }, { passive: true });
+
+    sheetContent.addEventListener('touchend', (e) => {
+      if (!isPullingBottom) return;
+      isPullingBottom = false;
+      const circleFill = document.getElementById('pullCircleFill');
+      const offset = parseFloat(circleFill.style.strokeDashoffset || '100');
+      circleFill.style.strokeDashoffset = 100;
+      document.getElementById('pullIndicatorText').innerText = "Scroll down to add exercise";
+      
+      if (offset <= 5) {
+        if (navigator.vibrate) navigator.vibrate(50);
+        openExerciseLibrary();
+      }
+    });
+
+    // REP EXERCISE LIBRARY (GitHub free-exercise-db + Curated List)
+    const curatedFallbackExercises = [
+      { name: "Barbell Bench Press", category: "chest", equipment: "Barbell", primaryMuscles: ["chest"], secondaryMuscles: ["deltoids", "triceps"] },
+      { name: "Incline Dumbbell Press", category: "chest", equipment: "Dumbbell", primaryMuscles: ["chest"], secondaryMuscles: ["deltoids", "triceps"] },
+      { name: "Cable Chest Fly", category: "chest", equipment: "Cable", primaryMuscles: ["chest"], secondaryMuscles: [] },
+      { name: "Wide-Grip Lat Pulldown", category: "back", equipment: "Cable", primaryMuscles: ["lats"], secondaryMuscles: ["biceps", "trapezius"] },
+      { name: "Barbell Bent-Over Row", category: "back", equipment: "Barbell", primaryMuscles: ["lats"], secondaryMuscles: ["middle back", "biceps"] },
+      { name: "Pull-Up", category: "back", equipment: "Bodyweight", primaryMuscles: ["lats"], secondaryMuscles: ["biceps"] },
+      { name: "Barbell Squat", category: "legs", equipment: "Barbell", primaryMuscles: ["quadriceps"], secondaryMuscles: ["glutes", "calves"] },
+      { name: "Romanian Deadlift", category: "legs", equipment: "Barbell", primaryMuscles: ["hamstrings"], secondaryMuscles: ["glutes", "lower back"] },
+      { name: "Leg Extension", category: "legs", equipment: "Machine", primaryMuscles: ["quadriceps"], secondaryMuscles: [] },
+      { name: "Lying Leg Curl", category: "legs", equipment: "Machine", primaryMuscles: ["hamstrings"], secondaryMuscles: ["calves"] },
+      { name: "Overhead Barbell Press", category: "shoulders", equipment: "Barbell", primaryMuscles: ["deltoids"], secondaryMuscles: ["triceps"] },
+      { name: "Dumbbell Lateral Raise", category: "shoulders", equipment: "Dumbbell", primaryMuscles: ["deltoids"], secondaryMuscles: [] },
+      { name: "Dumbbell Bicep Curl", category: "arms", equipment: "Dumbbell", primaryMuscles: ["biceps"], secondaryMuscles: ["forearms"] },
+      { name: "Tricep Rope Pushdown", category: "arms", equipment: "Cable", primaryMuscles: ["triceps"], secondaryMuscles: [] },
+      { name: "Hanging Leg Raise", category: "core", equipment: "Bodyweight", primaryMuscles: ["abdominals"], secondaryMuscles: ["obliques"] },
+      { name: "Cable Woodchopper", category: "core", equipment: "Cable", primaryMuscles: ["abdominals"], secondaryMuscles: ["obliques"] }
+    ];
+
+    async function loadRepExerciseCatalog() {
+      try {
+        const res = await fetch("https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json");
+        if (res.ok) {
+          const list = await res.json();
+          repCatalog = list.map(item => ({
+            name: item.name,
+            category: item.category || 'other',
+            equipment: item.equipment || 'Other',
+            primaryMuscles: item.primaryMuscles || [],
+            secondaryMuscles: item.secondaryMuscles || []
+          }));
+        } else {
+          repCatalog = curatedFallbackExercises;
+        }
+      } catch (err) {
+        repCatalog = curatedFallbackExercises;
+      }
+    }
+
+    function openExerciseLibrary() {
+      document.getElementById('libraryModal').classList.add('open');
+      filterLibraryExercises('');
+    }
+
+    function closeExerciseLibrary() {
+      document.getElementById('libraryModal').classList.remove('open');
+    }
+
+    function selectLibraryCategory(cat, btn) {
+      selectedCategory = cat;
+      document.querySelectorAll('.lib-cat-pill').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      filterLibraryExercises(document.getElementById('librarySearchInput').value);
+    }
+
+    function filterLibraryExercises(query) {
+      const listEl = document.getElementById('libraryList');
+      const q = query.toLowerCase().trim();
+      const catalog = repCatalog.length > 0 ? repCatalog : curatedFallbackExercises;
+
+      const filtered = catalog.filter(ex => {
+        const matchesQuery = !q || ex.name.toLowerCase().includes(q) || (ex.equipment && ex.equipment.toLowerCase().includes(q));
+        const matchesCat = selectedCategory === 'all' || 
+          ex.category.toLowerCase().includes(selectedCategory) ||
+          ex.primaryMuscles.some(m => m.toLowerCase().includes(selectedCategory));
+        return matchesQuery && matchesCat;
+      });
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div style="text-align:center; padding: 30px 10px; color:#8e8e93;">
+            <p style="margin-bottom:12px;">No exercises found matching "${query}".</p>
+            <button class="add-set-btn" onclick="addCustomExercise('${query}')">＋ Add as Custom Exercise</button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.slice(0, 50).forEach(ex => {
+        const escapedName = ex.name.replace(/'/g, "\\'");
+        html += `
+          <div class="lib-exercise-item" onclick="insertExerciseIntoWorkout('${escapedName}', '${ex.equipment || 'Exercise'}')">
+            <div>
+              <div class="lib-item-name">${ex.name}</div>
+              <div class="lib-item-meta">${ex.equipment || 'Exercise'} · ${ex.primaryMuscles.join(', ') || ex.category}</div>
+            </div>
+            <span class="lib-add-icon">＋</span>
+          </div>
+        `;
+      });
+
+      listEl.innerHTML = html;
+    }
+
+    function insertExerciseIntoWorkout(name, equipment) {
+      splitData.exercises.push({
+        name: name,
+        equipment: equipment,
+        restSeconds: 120,
+        sets: [
+          { reps: 12, weight: 20, kind: 'warmup', completed: false },
+          { reps: 10, weight: 30, kind: 'working', completed: false },
+          { reps: 10, weight: 30, kind: 'working', completed: false }
+        ]
+      });
+
+      closeExerciseLibrary();
+      renderExercises();
+      showToast(`Added ${name}!`);
+    }
+
+    function addCustomExercise(name) {
+      const exName = name || prompt("Enter exercise name:") || "Custom Exercise";
+      insertExerciseIntoWorkout(exName, "Custom");
     }
 
     // Finish Confirmation Dialog
@@ -1260,8 +1692,11 @@
         
         ex.sets.forEach((s, sIdx) => {
           const checkMark = s.completed ? '✓' : '•';
-          const warmupStr = s.kind === 'warmup' ? ' (Warmup 🔥)' : '';
-          text += `   ${checkMark} Set ${sIdx + 1}: ${s.reps} reps @ ${s.weight} ${splitData.weightUnit}${warmupStr}\n`;
+          let kindStr = '';
+          if (s.kind === 'warmup') kindStr = ' (Warmup 🔥)';
+          else if (s.kind === 'drop') kindStr = ' (Drop Set 💧)';
+          else if (s.kind === 'failure') kindStr = ' (Failure ⚡)';
+          text += `   ${checkMark} Set ${sIdx + 1}: ${s.reps} reps @ ${s.weight} ${splitData.weightUnit}${kindStr}\n`;
         });
         text += `\n`;
       });
@@ -1295,7 +1730,6 @@
     }
 
     function redirectToBlankPage() {
-      // Clear URL hash & params to prevent re-entering workout
       if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.pathname);
       }
