@@ -292,22 +292,35 @@
       position: relative;
     }
 
-    /* Pull-to-add Exercise Indicator */
+    /* Pull-to-add Exercise Indicator: Revealed ONLY when actively scrolling/pulling down */
     .pull-indicator-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 24px 0 10px;
+      gap: 6px;
+      padding: 0;
       color: var(--text-muted);
       font-size: 13px;
       font-weight: 600;
+      opacity: 0;
+      height: 0;
+      transform: scale(0.85);
+      transition: opacity 0.2s ease, transform 0.2s ease, height 0.2s ease;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .pull-indicator-wrap.active {
+      opacity: 1;
+      height: 68px;
+      transform: scale(1);
+      padding: 10px 0;
     }
 
     .pull-circle-svg {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       transform: rotate(-90deg);
     }
 
@@ -324,7 +337,7 @@
       stroke-dasharray: 100;
       stroke-dashoffset: 100;
       stroke-linecap: round;
-      transition: stroke-dashoffset 0.1s ease;
+      transition: stroke-dashoffset 0.05s ease;
     }
 
     .add-exercise-main-btn {
@@ -402,10 +415,25 @@
       margin-bottom: 10px;
     }
 
+    /* Interactive Rest Target Badge */
     .rest-target-badge {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 4px;
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 10px;
+      padding: 3px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .rest-target-badge:active {
+      background: rgba(0, 0, 0, 0.12);
+      transform: scale(0.96);
     }
 
     /* Sets Container */
@@ -543,6 +571,36 @@
       justify-content: center;
       gap: 6px;
       cursor: pointer;
+    }
+
+    /* REST DURATION PICKER MODAL */
+    .rest-presets-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .rest-preset-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 12px 4px;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .rest-preset-btn:active {
+      transform: scale(0.96);
+    }
+
+    .rest-preset-btn.active-target {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
     }
 
     /* EXERCISE SEARCH & ADD MODAL (Rep Library) */
@@ -991,18 +1049,39 @@
     <div class="sheet-content" id="sheetContent">
       <div id="exercisesContainer"></div>
       
-      <!-- Pull-to-add Exercise Indicator at Bottom -->
+      <!-- Pull-to-add Exercise Indicator: Shown ONLY while scrolling/pulling down -->
       <div class="pull-indicator-wrap" id="pullIndicatorWrap">
         <svg class="pull-circle-svg" viewBox="0 0 36 36">
           <circle class="pull-circle-bg" cx="18" cy="18" r="15.915"></circle>
           <circle class="pull-circle-fill" id="pullCircleFill" cx="18" cy="18" r="15.915"></circle>
         </svg>
-        <span id="pullIndicatorText">Scroll down to add exercise</span>
+        <span id="pullIndicatorText">Pull to add exercise</span>
       </div>
 
       <button class="add-exercise-main-btn" onclick="openExerciseLibrary()">
         <span>＋ Add Exercise from Rep Library</span>
       </button>
+    </div>
+  </div>
+
+  <!-- REST DURATION PICKER MODAL -->
+  <div class="confirm-overlay" id="restPickerModal">
+    <div class="confirm-card" style="max-width: 340px;">
+      <h3 class="confirm-title" style="margin-bottom: 4px;">Rest Duration</h3>
+      <p class="confirm-msg" id="restPickerExerciseTitle" style="margin-bottom: 16px;">Set rest countdown target</p>
+      
+      <div class="rest-presets-grid" id="restPresetsGrid">
+        <button class="rest-preset-btn" onclick="selectRestTarget(30)">30s</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(60)">1m</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(90)">1m 30s</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(120)">2m</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(150)">2m 30s</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(180)">3m</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(240)">4m</button>
+        <button class="rest-preset-btn" onclick="selectRestTarget(300)">5m</button>
+      </div>
+
+      <button class="btn-cancel-confirm" style="margin-top: 16px;" onclick="closeRestPicker()">Cancel</button>
     </div>
   </div>
 
@@ -1110,15 +1189,20 @@
     let restTimerInterval = null;
     let totalCompletedSets = 0;
     let totalPlannedSets = 0;
+    let activeRestExerciseIndex = null;
 
     // Rep Exercise Library Cache
     let repCatalog = [];
     let selectedCategory = 'all';
 
-    // Sheet touch physics (Clamped strictly to half and expanded)
+    // Sheet touch physics
     const sheet = document.getElementById('bottomSheet');
     const dragHandle = document.getElementById('dragHandle');
     const sheetContent = document.getElementById('sheetContent');
+    const pullWrap = document.getElementById('pullIndicatorWrap');
+    const pullCircle = document.getElementById('pullCircleFill');
+    const pullText = document.getElementById('pullIndicatorText');
+
     let startY = 0;
     let currentY = 0;
     let initialTop = 0;
@@ -1128,6 +1212,13 @@
     // Pull down to add exercise state
     let pullStartY = 0;
     let isPullingBottom = false;
+
+    function formatRestDuration(seconds) {
+      if (seconds < 60) return `${seconds}s`;
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return s > 0 ? `${m}m ${s}s` : `${m}m`;
+    }
 
     function initSplit() {
       loadRepExerciseCatalog();
@@ -1157,7 +1248,7 @@
           exercises: (rawObj.e || rawObj.exercises || []).map(ex => ({
             name: ex.n || ex.name || 'Exercise',
             equipment: ex.e || ex.equipment || '',
-            restSeconds: ex.r || ex.restSeconds || 120,
+            restSeconds: ex.r !== undefined ? ex.r : ex.restSeconds || 120,
             sets: (ex.t || ex.sets || []).map(s => ({
               reps: s.r !== undefined ? s.r : s.reps || 10,
               weight: s.w !== undefined ? s.w : s.weight || 0,
@@ -1191,7 +1282,7 @@
 
       splitData.exercises.forEach((ex, exIdx) => {
         totalPlannedSets += ex.sets.length;
-        const restMin = Math.floor(ex.restSeconds / 60);
+        const restStr = formatRestDuration(ex.restSeconds);
 
         let setsHtml = '';
         ex.sets.forEach((set, sIdx) => {
@@ -1240,7 +1331,7 @@
             </div>
             <div class="exercise-meta-row">
               <span>${ex.equipment || 'Exercise'}</span>
-              <span class="rest-target-badge">⏱ ${restMin}m</span>
+              <button class="rest-target-badge" onclick="openRestPicker(${exIdx})">⏱ ${restStr}</button>
             </div>
             <div class="sets-container" id="sets-list-${exIdx}">
               ${setsHtml}
@@ -1309,6 +1400,52 @@
 
     function updateTopCounter() {
       document.getElementById('topCounter').innerText = `${totalCompletedSets} / ${totalPlannedSets}`;
+    }
+
+    // Rest Target Picker
+    function openRestPicker(exIdx) {
+      activeRestExerciseIndex = exIdx;
+      const ex = splitData.exercises[exIdx];
+      document.getElementById('restPickerExerciseTitle').innerText = `${ex.name} — Current: ${formatRestDuration(ex.restSeconds)}`;
+      
+      const buttons = document.querySelectorAll('.rest-preset-btn');
+      buttons.forEach(btn => {
+        const text = btn.innerText.trim();
+        const durationSec = parsePresetDuration(text);
+        if (durationSec === ex.restSeconds) {
+          btn.classList.add('active-target');
+        } else {
+          btn.classList.remove('active-target');
+        }
+      });
+
+      document.getElementById('restPickerModal').classList.add('open');
+    }
+
+    function parsePresetDuration(str) {
+      if (str === '30s') return 30;
+      if (str === '1m') return 60;
+      if (str === '1m 30s') return 90;
+      if (str === '2m') return 120;
+      if (str === '2m 30s') return 150;
+      if (str === '3m') return 180;
+      if (str === '4m') return 240;
+      if (str === '5m') return 300;
+      return 120;
+    }
+
+    function selectRestTarget(seconds) {
+      if (activeRestExerciseIndex !== null && splitData.exercises[activeRestExerciseIndex]) {
+        splitData.exercises[activeRestExerciseIndex].restSeconds = seconds;
+        showToast(`Rest target updated to ${formatRestDuration(seconds)}`);
+      }
+      closeRestPicker();
+      renderExercises();
+    }
+
+    function closeRestPicker() {
+      document.getElementById('restPickerModal').classList.remove('open');
+      activeRestExerciseIndex = null;
     }
 
     // Workout Clock
@@ -1397,9 +1534,9 @@
       sheet.style.top = '';
     }
 
-    // Pull bottom overscroll to add exercise
+    // Pull bottom overscroll to add exercise (Visible ONLY while actively pulling)
     sheetContent.addEventListener('touchstart', (e) => {
-      const atBottom = (sheetContent.scrollHeight - sheetContent.scrollTop - sheetContent.clientHeight) < 10;
+      const atBottom = (sheetContent.scrollHeight - sheetContent.scrollTop - sheetContent.clientHeight) < 8;
       if (atBottom) {
         pullStartY = e.touches[0].clientY;
         isPullingBottom = true;
@@ -1410,24 +1547,26 @@
       if (!isPullingBottom) return;
       const currentTouchY = e.touches[0].clientY;
       const pullDelta = pullStartY - currentTouchY;
-      if (pullDelta > 0) {
-        const progress = Math.min(100, (pullDelta / 90) * 100);
-        document.getElementById('pullCircleFill').style.strokeDashoffset = 100 - progress;
+      if (pullDelta > 6) {
+        pullWrap.classList.add('active');
+        const progress = Math.min(100, (pullDelta / 85) * 100);
+        pullCircle.style.strokeDashoffset = 100 - progress;
         if (progress >= 100) {
-          document.getElementById('pullIndicatorText').innerText = "Release to add exercise!";
+          pullText.innerText = "Release to add exercise!";
         } else {
-          document.getElementById('pullIndicatorText').innerText = "Keep pulling to add exercise";
+          pullText.innerText = "Pull to add exercise";
         }
+      } else {
+        pullWrap.classList.remove('active');
       }
     }, { passive: true });
 
     sheetContent.addEventListener('touchend', (e) => {
       if (!isPullingBottom) return;
       isPullingBottom = false;
-      const circleFill = document.getElementById('pullCircleFill');
-      const offset = parseFloat(circleFill.style.strokeDashoffset || '100');
-      circleFill.style.strokeDashoffset = 100;
-      document.getElementById('pullIndicatorText').innerText = "Scroll down to add exercise";
+      const offset = parseFloat(pullCircle.style.strokeDashoffset || '100');
+      pullCircle.style.strokeDashoffset = 100;
+      pullWrap.classList.remove('active');
       
       if (offset <= 5) {
         if (navigator.vibrate) navigator.vibrate(50);
