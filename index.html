@@ -129,6 +129,11 @@
       padding: 0 14px;
       gap: 6px;
       text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+
+    .nav-btn:active {
+      transform: scale(0.96);
     }
 
     .download-app-btn {
@@ -1009,11 +1014,11 @@
 
   <!-- Top Navigation Bar -->
   <div class="top-nav" id="topNav">
-    <a href="https://testflight.apple.com/join/juxSXXRQ" target="_blank" rel="noopener noreferrer" class="nav-btn download-app-btn" id="downloadAppBtn">
+    <a href="de.julian.rep://split/import" class="nav-btn download-app-btn" id="downloadAppBtn">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.66-1.06 1.73-.93 2.76 1.01.08 2.02-.51 2.64-1.26z"/>
       </svg>
-      <span>Get Rep</span>
+      <span>Open in Rep</span>
     </a>
     <div class="top-counter" id="topCounter">0 / 0</div>
     <button class="nav-btn finish-btn" onclick="promptFinishWorkout()">
@@ -1085,7 +1090,7 @@
     </div>
   </div>
 
-  <!-- EXERCISE LIBRARY SEARCH MODAL (Rep / GitHub Database) -->
+  <!-- EXERCISE SEARCH & ADD MODAL (Rep Library) -->
   <div class="library-modal-overlay" id="libraryModal">
     <div class="library-card">
       <div class="library-header">
@@ -1257,6 +1262,25 @@
             }))
           }))
         };
+
+        const appDeepLink = `de.julian.rep://split/import?data=${rawData}`;
+        const downloadBtn = document.getElementById('downloadAppBtn');
+        if (downloadBtn) {
+          downloadBtn.href = appDeepLink;
+          downloadBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.66-1.06 1.73-.93 2.76 1.01.08 2.02-.51 2.64-1.26z"/>
+            </svg>
+            <span>Open in Rep</span>
+          `;
+        }
+
+        // Auto prompt to open in native Rep app on iOS
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          setTimeout(() => {
+            window.location.href = appDeepLink;
+          }, 350);
+        }
         
         renderExercises();
         startWorkoutClock();
