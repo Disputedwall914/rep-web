@@ -308,7 +308,8 @@
       const splitName = split.n || split.name || 'Shared Workout';
       const weightUnit = split.u || split.weightUnit || 'kg';
       const exercises = split.e || split.exercises || [];
-      const appDeepLink = `de.julian.rep://split/import?data=${window.location.hash.split('data=')[1] || new URLSearchParams(window.location.search).get('data')}`;
+      const dataParam = window.location.hash.includes('data=') ? window.location.hash.split('data=')[1] : new URLSearchParams(window.location.search).get('data');
+      const appDeepLink = `de.julian.rep://split/import?data=${dataParam}`;
 
       let exercisesHtml = '';
       exercises.forEach((ex, exIndex) => {
