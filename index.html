@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Rep Active Workout</title>
+  <title>Rep · Active Workout & Training</title>
   <style>
     :root {
       --bg: #000000;
@@ -44,8 +44,8 @@
 
     /* Top Navigation Bar */
     .top-nav {
-      height: 54px;
-      padding: 10px 16px 0;
+      height: 52px;
+      padding: 6px 16px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -54,48 +54,49 @@
     }
 
     .nav-btn {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       background: var(--btn-dark);
       color: var(--text-light);
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       cursor: pointer;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
+      height: 38px;
+      padding: 0 14px;
+      gap: 6px;
+      text-decoration: none;
     }
 
-    .back-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+    .download-app-btn {
+      color: var(--accent-blue);
+      background: rgba(10, 132, 255, 0.12);
+      border-color: rgba(10, 132, 255, 0.3);
     }
 
-    .back-btn svg {
-      width: 20px;
-      height: 20px;
+    .download-app-btn svg {
+      width: 17px;
+      height: 17px;
       fill: none;
       stroke: currentColor;
-      stroke-width: 2.5;
+      stroke-width: 2.4;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
 
     .top-counter {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       letter-spacing: -0.2px;
       font-variant-numeric: tabular-nums;
+      color: var(--text-light);
     }
 
     .finish-btn {
-      height: 38px;
-      padding: 0 14px;
-      gap: 8px;
       background: #1c1c1e;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
+      color: var(--text-light);
     }
 
     .watch-icon {
@@ -110,48 +111,53 @@
       fill: currentColor;
     }
 
-    /* Top Timer Area */
+    /* Top Timer Area (Fixed in top half, perfectly visible when sheet is half open) */
     .timer-area {
-      flex: 1;
+      position: absolute;
+      top: calc(52px + env(safe-area-inset-top, 0px));
+      left: 0;
+      right: 0;
+      height: 200px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding-bottom: 30px;
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      z-index: 5;
+      padding-top: 4px;
     }
 
     .big-timer {
-      font-size: 78px;
+      font-size: 72px;
       font-weight: 800;
       letter-spacing: -2px;
       line-height: 1;
       font-variant-numeric: tabular-nums;
-      margin-bottom: 8px;
-      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
+      margin-bottom: 4px;
+      color: #ffffff;
+      text-shadow: 0 4px 24px rgba(255, 255, 255, 0.2);
     }
 
     .total-elapsed {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: var(--text-muted);
       font-variant-numeric: tabular-nums;
-      margin-bottom: 24px;
+      margin-bottom: 14px;
     }
 
     .timer-controls {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
     }
 
     .timer-adjust-btn {
-      width: 46px;
-      height: 46px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: #1c1c1e;
       color: var(--text-light);
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -164,21 +170,21 @@
 
     .timer-adjust-btn svg {
       position: absolute;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       stroke: currentColor;
       fill: none;
       stroke-width: 2;
     }
 
     .skip-btn {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--text-light);
       background: none;
       border: none;
       cursor: pointer;
-      padding: 8px 14px;
+      padding: 6px 12px;
     }
 
     /* Draggable White Sheet */
@@ -191,7 +197,7 @@
       color: var(--text-dark);
       border-top-left-radius: 34px;
       border-top-right-radius: 34px;
-      box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
       z-index: 20;
       display: flex;
       flex-direction: column;
@@ -199,20 +205,20 @@
       will-change: top;
     }
 
-    /* Snap positions calculated in JS: collapsed, half, expanded */
-    .sheet.collapsed { top: calc(100vh - 200px); }
-    .sheet.half { top: 290px; }
-    .sheet.expanded { top: calc(54px + env(safe-area-inset-top, 0px)); }
+    /* Snap positions: collapsed, half, expanded */
+    .sheet.collapsed { top: calc(100vh - 170px); }
+    .sheet.half { top: 260px; }
+    .sheet.expanded { top: calc(52px + env(safe-area-inset-top, 0px)); }
 
     .sheet-handle-bar {
       width: 100%;
-      height: 30px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: grab;
       touch-action: none;
-      padding-top: 6px;
+      padding-top: 4px;
     }
 
     .sheet-handle {
@@ -226,12 +232,12 @@
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 4px 18px 80px;
+      padding: 6px 18px 80px;
     }
 
     /* Exercise Section in Sheet */
     .exercise-block {
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
     .exercise-title-row {
@@ -256,7 +262,7 @@
     }
 
     .exercise-title {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 800;
       letter-spacing: -0.4px;
       color: var(--text-dark);
@@ -265,15 +271,15 @@
     .exercise-menu-btn {
       background: #f2f2f7;
       border: none;
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       color: var(--text-muted);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
     }
 
@@ -284,23 +290,13 @@
       font-size: 14px;
       font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .rest-target-badge {
       display: flex;
       align-items: center;
       gap: 4px;
-    }
-
-    .hint-box {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.35;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
     }
 
     /* Sets Container */
@@ -315,7 +311,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-radius: 16px;
       background: transparent;
       transition: background 0.15s ease;
@@ -336,7 +332,6 @@
       display: flex;
       align-items: baseline;
       gap: 6px;
-      cursor: pointer;
     }
 
     .input-number {
@@ -347,7 +342,7 @@
       font-variant-numeric: tabular-nums;
       border: none;
       background: none;
-      width: 44px;
+      width: 46px;
       outline: none;
     }
 
@@ -425,128 +420,291 @@
       cursor: pointer;
     }
 
-    /* Finish Celebration Modal */
-    .modal-overlay {
+    /* FULLSCREEN WORKOUT COMPLETION SCREEN */
+    .completion-screen {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      z-index: 100;
+      background: #ffffff;
+      color: #000000;
+      z-index: 50;
       display: none;
-      align-items: flex-end;
-      justify-content: center;
+      flex-direction: column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: env(safe-area-inset-top, 16px) 20px 30px;
     }
 
-    .modal-overlay.open {
+    .completion-screen.open {
       display: flex;
     }
 
-    .summary-card {
-      background: #18181c;
-      width: 100%;
-      max-width: 500px;
-      border-top-left-radius: 32px;
-      border-top-right-radius: 32px;
-      padding: 28px 20px 44px;
-      color: white;
-      text-align: center;
-      animation: slideUp 0.35s cubic-bezier(0.18, 0.89, 0.32, 1);
+    .completion-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
     }
 
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
-    .trophy-badge {
-      width: 72px;
-      height: 72px;
+    .comp-action-btn {
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ff9500, #ff2d55);
-      display: inline-flex;
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
-      margin-bottom: 14px;
-      box-shadow: 0 10px 30px rgba(255, 149, 0, 0.3);
+      font-size: 18px;
+      color: #000;
+      cursor: pointer;
     }
 
-    .summary-title {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-
-    .summary-subtitle {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .stat-pill {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 12px 8px;
-      border-radius: 16px;
-    }
-
-    .stat-val {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 2px;
-    }
-
-    .stat-lbl {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .export-notes-btn {
-      width: 100%;
-      padding: 16px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #ff9500, #ff3b30);
-      color: white;
-      border: none;
-      font-size: 17px;
-      font-weight: 700;
+    .completion-laurel {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 20px rgba(255, 149, 0, 0.25);
-    }
-
-    .copy-text-btn {
-      width: 100%;
-      padding: 14px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.08);
-      color: white;
-      border: none;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
+      font-size: 18px;
+      font-weight: 800;
+      color: #000000;
       margin-bottom: 12px;
     }
 
-    .close-modal-btn {
+    .completion-sentence {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.25;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.28);
+      margin-bottom: 20px;
+      padding: 0 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .completion-sentence .highlight {
+      color: #000000;
+      font-weight: 800;
+    }
+
+    .completion-pills-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .comp-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 20px;
       font-size: 15px;
-      color: var(--text-muted);
-      background: none;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .comp-pill.sets-pill span:first-child {
+      color: var(--accent-red);
+    }
+
+    /* Muscle Anatomy Heatmap */
+    .anatomy-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 10px 0 28px;
+      min-height: 240px;
+      position: relative;
+    }
+
+    .anatomy-figure {
+      position: relative;
+      width: 140px;
+      height: 240px;
+    }
+
+    .anatomy-figure img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .anatomy-base {
+      opacity: 0.35;
+      filter: grayscale(1) contrast(1.1);
+    }
+
+    .anatomy-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0.9;
+    }
+
+    .anatomy-layer.primary {
+      filter: brightness(0) saturate(100%) invert(58%) sepia(85%) saturate(2200%) hue-rotate(360deg) brightness(102%) contrast(105%);
+    }
+
+    .anatomy-layer.secondary {
+      filter: brightness(0) saturate(100%) invert(45%) sepia(98%) saturate(4532%) hue-rotate(201deg) brightness(104%) contrast(101%);
+    }
+
+    .completion-bottom-btn {
+      width: 100%;
+      height: 56px;
+      border-radius: 28px;
+      background: #000000;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
       border: none;
       cursor: pointer;
-      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: auto;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ANIMATED REP LANDING PAGE */
+    .landing-page {
+      position: fixed;
+      inset: 0;
+      background: #0d0d0f;
+      color: #ffffff;
+      z-index: 40;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: env(safe-area-inset-top, 24px) 20px 50px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .landing-page.open {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .hero-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 10px 20px;
+    }
+
+    .app-icon-badge {
+      width: 84px;
+      height: 84px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #1c1c1e, #000000);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin-bottom: 20px;
+      box-shadow: 0 16px 40px rgba(10, 132, 255, 0.25);
+    }
+
+    .landing-title {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+    }
+
+    .landing-tagline {
+      font-size: 17px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      max-width: 320px;
+      margin-bottom: 28px;
+    }
+
+    .landing-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 320px;
+      height: 54px;
+      border-radius: 27px;
+      background: linear-gradient(135deg, #0a84ff, #5e5ce6);
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(10, 132, 255, 0.4);
+      margin-bottom: 14px;
+    }
+
+    .resume-workout-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 40px;
+    }
+
+    .features-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: #18181c;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .feat-icon {
+      font-size: 26px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feat-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .feat-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.35;
     }
 
     /* Toast */
@@ -564,9 +722,6 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       z-index: 200;
       transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .toast.show {
@@ -578,9 +733,10 @@
 
   <!-- Top Navigation Bar -->
   <div class="top-nav">
-    <button class="nav-btn back-btn" onclick="toggleSheetPosition()">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-    </button>
+    <a href="de.julian.rep://split/import" class="nav-btn download-app-btn" id="downloadAppBtn">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      <span>Get Rep</span>
+    </a>
     <div class="top-counter" id="topCounter">0 / 0</div>
     <button class="nav-btn finish-btn" onclick="finishWorkout()">
       <span class="watch-icon">
@@ -590,7 +746,7 @@
     </button>
   </div>
 
-  <!-- Top Big Rest Timer Area -->
+  <!-- Top Big Rest Timer Area (Clearly positioned in upper half) -->
   <div class="timer-area" id="timerArea">
     <div class="big-timer" id="restTimerDisplay">0:00</div>
     <div class="total-elapsed" id="totalElapsedDisplay">0:00</div>
@@ -607,53 +763,122 @@
     </div>
   </div>
 
-  <!-- Draggable Sheet -->
+  <!-- Draggable Bottom Sheet -->
   <div class="sheet half" id="bottomSheet">
     <div class="sheet-handle-bar" id="dragHandle">
       <div class="sheet-handle"></div>
     </div>
     <div class="sheet-content" id="sheetContent">
-      <!-- Exercises dynamically injected here -->
+      <!-- Exercises dynamically injected -->
     </div>
   </div>
 
-  <!-- Workout Finished & Export to Apple Notes Modal -->
-  <div class="modal-overlay" id="finishModal">
-    <div class="summary-card">
-      <div class="trophy-badge">🏆</div>
-      <h2 class="summary-title" id="summaryTitle">Workout Finished!</h2>
-      <p class="summary-subtitle" id="summarySubtitle">Incredible work today.</p>
+  <!-- FULLSCREEN WORKOUT COMPLETION SCREEN (Exact Replica) -->
+  <div class="completion-screen" id="completionScreen">
+    <div class="completion-top-bar">
+      <button class="comp-action-btn" onclick="exportWorkoutOnly()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      </button>
+      <button class="comp-action-btn" onclick="goToLandingPage()">✕</button>
+    </div>
 
-      <div class="stats-grid">
-        <div class="stat-pill">
-          <div class="stat-val" id="summaryDuration">0m</div>
-          <div class="stat-lbl">Duration</div>
-        </div>
-        <div class="stat-pill">
-          <div class="stat-val" id="summarySets">0</div>
-          <div class="stat-lbl">Sets</div>
-        </div>
-        <div class="stat-pill">
-          <div class="stat-val" id="summaryVolume">0 kg</div>
-          <div class="stat-lbl">Volume</div>
+    <div class="completion-laurel">
+      <span>🌿</span>
+      <span>Congratulations</span>
+      <span>🌿</span>
+    </div>
+
+    <div class="completion-sentence" id="completionSentence">
+      You have completed<br>
+      <span class="highlight" id="compSetsHighlight">14 sets</span> and lifted<br>
+      <span class="highlight" id="compVolumeHighlight">8,375 kg</span> in <span class="highlight" id="compTimeHighlight">59 min</span>
+    </div>
+
+    <div class="completion-pills-row">
+      <div class="comp-pill sets-pill">
+        <span>🏋️</span>
+        <span id="compPillSets">14 sets</span>
+      </div>
+      <div class="comp-pill">
+        <span>🏆</span>
+        <span id="compPillRecords">Workout Completed</span>
+      </div>
+    </div>
+
+    <!-- Body Anatomy Heatmap (Front & Back) -->
+    <div class="anatomy-container">
+      <div class="anatomy-figure">
+        <img class="anatomy-base" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscular_system_front.svg" alt="Front Anatomy">
+        <!-- Overlay layers -->
+        <img class="anatomy-layer primary" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-4.svg" alt="Chest">
+        <img class="anatomy-layer primary" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-10.svg" alt="Quads">
+        <img class="anatomy-layer secondary" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-7.svg" alt="Calves">
+      </div>
+      <div class="anatomy-figure">
+        <img class="anatomy-base" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscular_system_back.svg" alt="Back Anatomy">
+        <!-- Overlay layers -->
+        <img class="anatomy-layer primary" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-12.svg" alt="Lats">
+        <img class="anatomy-layer primary" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-8.svg" alt="Glutes">
+        <img class="anatomy-layer secondary" src="https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/muscles/muscle-11.svg" alt="Hamstrings">
+      </div>
+    </div>
+
+    <button class="completion-bottom-btn" onclick="continueToLandingPrompt()">
+      Continue
+    </button>
+  </div>
+
+  <!-- ANIMATED LANDING PAGE FOR REP -->
+  <div class="landing-page" id="landingPage">
+    <div class="hero-wrap">
+      <div class="app-icon-badge">⚡</div>
+      <h1 class="landing-title">Rep</h1>
+      <p class="landing-tagline">Focused strength training, without the noise. Designed for iPhone & Apple Watch.</p>
+
+      <a href="https://apps.apple.com" class="landing-cta-btn">
+        <span>Download on App Store</span>
+      </a>
+
+      <button class="resume-workout-btn" onclick="closeLandingPage()">
+        <span>↩ Return to Active Workout</span>
+      </button>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon">⏱️</div>
+        <div>
+          <h3 class="feat-title">Smart Rest Timers</h3>
+          <p class="feat-desc">Dynamic rest countdowns on your Lock Screen, Dynamic Island, and Apple Watch.</p>
         </div>
       </div>
-
-      <button class="export-notes-btn" onclick="exportToAppleNotes()">
-        <span>📝 Export to Apple Notes</span>
-      </button>
-
-      <button class="copy-text-btn" onclick="copyPlainText()">
-        <span>📋 Copy Plain Text</span>
-      </button>
-
-      <button class="close-modal-btn" onclick="closeFinishModal()">Close</button>
+      <div class="feature-card">
+        <div class="feat-icon">🔥</div>
+        <div>
+          <h3 class="feat-title">Anatomy Muscle Heatmaps</h3>
+          <p class="feat-desc">Visual fatigue and muscle recovery tracking mapped across 15 anatomical regions.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📈</div>
+        <div>
+          <h3 class="feat-title">Automatic Progressive Overload</h3>
+          <p class="feat-desc">Smart weight and rep progressions calculated automatically after every session.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">⌚</div>
+        <div>
+          <h3 class="feat-title">Standalone Apple Watch App</h3>
+          <p class="feat-desc">Log sets, check weights, and manage rest timers directly from your wrist.</p>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Toast Notification -->
   <div class="toast" id="toast">
-    <span id="toastMsg">Copied!</span>
+    <span id="toastMsg">Exported!</span>
   </div>
 
   <script>
@@ -673,10 +898,9 @@
     let currentY = 0;
     let initialTop = 0;
     let isDragging = false;
-    let sheetState = 'half'; // 'collapsed', 'half', 'expanded'
+    let sheetState = 'half';
 
     function initSplit() {
-      // Read #data= or ?data=
       let rawData = null;
       if (window.location.hash.includes('data=')) {
         rawData = window.location.hash.split('data=')[1];
@@ -686,19 +910,29 @@
       }
 
       if (!rawData) {
-        // Fallback sample split for preview
+        // Sample split for default demo
         splitData = {
-          name: "Push Day",
+          name: "Legs & Pull Day",
           weightUnit: "kg",
           exercises: [
             {
-              name: "Dumbbell Alternate Bicep Curl",
-              equipment: "Dumbbell",
+              name: "Lying Leg Curls",
+              equipment: "Machine",
               restSeconds: 180,
               sets: [
-                { reps: 12, weight: 6, kind: "warmup" },
-                { reps: 8, weight: 12, kind: "working" },
-                { reps: 8, weight: 12, kind: "working" }
+                { reps: 12, weight: 20, kind: "warmup", completed: false },
+                { reps: 10, weight: 42.5, kind: "working", completed: false },
+                { reps: 10, weight: 42.5, kind: "working", completed: false }
+              ]
+            },
+            {
+              name: "Leg Extensions",
+              equipment: "Machine",
+              restSeconds: 180,
+              sets: [
+                { reps: 12, weight: 35, kind: "warmup", completed: false },
+                { reps: 10, weight: 65, kind: "working", completed: false },
+                { reps: 10, weight: 65, kind: "working", completed: false }
               ]
             },
             {
@@ -706,9 +940,9 @@
               equipment: "Cable",
               restSeconds: 180,
               sets: [
-                { reps: 12, weight: 30, kind: "warmup" },
-                { reps: 8, weight: 60, kind: "working" },
-                { reps: 8, weight: 60, kind: "working" }
+                { reps: 12, weight: 30, kind: "warmup", completed: false },
+                { reps: 8, weight: 60, kind: "working", completed: false },
+                { reps: 8, weight: 60, kind: "working", completed: false }
               ]
             }
           ]
@@ -735,6 +969,9 @@
               }))
             }))
           };
+          
+          // Update download link deep link
+          document.getElementById('downloadAppBtn').href = `de.julian.rep://split/import?data=${rawData}`;
         } catch (e) {
           console.error(e);
         }
@@ -813,12 +1050,10 @@
       const set = splitData.exercises[exIdx].sets[sIdx];
       set.completed = !set.completed;
 
-      // Haptic feedback
       if (navigator.vibrate) navigator.vibrate(40);
 
       if (set.completed) {
         startRestTimer(splitData.exercises[exIdx].restSeconds || 120);
-        // Slide sheet down slightly to half view so user sees countdown
         snapSheet('half');
       }
 
@@ -896,7 +1131,7 @@
       if (navigator.vibrate) navigator.vibrate(20);
     }
 
-    // Sheet Touch Dragging & Snap points
+    // Dragging & Snapping
     dragHandle.addEventListener('touchstart', (e) => {
       startY = e.touches[0].clientY;
       initialTop = sheet.getBoundingClientRect().top;
@@ -909,8 +1144,8 @@
       currentY = e.touches[0].clientY;
       const deltaY = currentY - startY;
       let newTop = initialTop + deltaY;
-      const minTop = 60;
-      const maxTop = window.innerHeight - 160;
+      const minTop = 52;
+      const maxTop = window.innerHeight - 150;
       if (newTop < minTop) newTop = minTop;
       if (newTop > maxTop) newTop = maxTop;
       sheet.style.top = `${newTop}px`;
@@ -924,9 +1159,9 @@
       const currentTop = sheet.getBoundingClientRect().top;
       const windowHeight = window.innerHeight;
 
-      if (currentTop < 180) {
+      if (currentTop < 170) {
         snapSheet('expanded');
-      } else if (currentTop > windowHeight - 260) {
+      } else if (currentTop > windowHeight - 240) {
         snapSheet('collapsed');
       } else {
         snapSheet('half');
@@ -939,12 +1174,7 @@
       sheet.style.top = '';
     }
 
-    function toggleSheetPosition() {
-      if (sheetState === 'expanded') snapSheet('half');
-      else snapSheet('expanded');
-    }
-
-    // Finish & Export to Apple Notes
+    // Fullscreen Completion & Heatmap
     function finishWorkout() {
       const elapsedSec = Math.floor((Date.now() - workoutStartTime) / 1000);
       const mins = Math.max(1, Math.floor(elapsedSec / 60));
@@ -952,21 +1182,16 @@
       let totalVol = 0;
       splitData.exercises.forEach(ex => {
         ex.sets.forEach(s => {
-          if (s.completed) {
-            totalVol += (s.weight * s.reps);
-          }
+          if (s.completed) totalVol += (s.weight * s.reps);
         });
       });
 
-      document.getElementById('summaryTitle').innerText = splitData.name;
-      document.getElementById('summaryDuration').innerText = `${mins}m`;
-      document.getElementById('summarySets').innerText = `${totalCompletedSets}`;
-      document.getElementById('summaryVolume').innerText = `${totalVol.toLocaleString()} ${splitData.weightUnit}`;
-      document.getElementById('finishModal').classList.add('open');
-    }
-
-    function closeFinishModal() {
-      document.getElementById('finishModal').classList.remove('open');
+      document.getElementById('compSetsHighlight').innerText = `${totalCompletedSets} sets`;
+      document.getElementById('compVolumeHighlight').innerText = `${totalVol.toLocaleString()} ${splitData.weightUnit}`;
+      document.getElementById('compTimeHighlight').innerText = `${mins} min`;
+      document.getElementById('compPillSets').innerText = `${totalCompletedSets} sets`;
+      
+      document.getElementById('completionScreen').classList.add('open');
     }
 
     function buildWorkoutPlainText() {
@@ -1001,29 +1226,44 @@
       return text;
     }
 
-    async function exportToAppleNotes() {
+    async function exportWorkoutOnly() {
       const text = buildWorkoutPlainText();
       if (navigator.share) {
         try {
           await navigator.share({
-            title: `${splitData.name} - Workout Notes`,
+            title: `${splitData.name} Workout`,
             text: text
           });
         } catch (err) {
-          copyPlainText();
+          fallbackCopyText(text);
         }
       } else {
-        copyPlainText();
+        fallbackCopyText(text);
       }
     }
 
-    function copyPlainText() {
-      const text = buildWorkoutPlainText();
+    function fallbackCopyText(text) {
       navigator.clipboard.writeText(text).then(() => {
-        showToast('Workout copied to clipboard!');
+        showToast('Workout Exported & Copied!');
       }).catch(() => {
-        showToast('Failed to copy');
+        showToast('Export Ready');
       });
+    }
+
+    function continueToLandingPrompt() {
+      showToast('Liked that? Download Rep for the best experience!');
+      setTimeout(() => {
+        goToLandingPage();
+      }, 1200);
+    }
+
+    function goToLandingPage() {
+      document.getElementById('completionScreen').classList.remove('open');
+      document.getElementById('landingPage').classList.add('open');
+    }
+
+    function closeLandingPage() {
+      document.getElementById('landingPage').classList.remove('open');
     }
 
     function showToast(msg) {
@@ -1032,7 +1272,7 @@
       toast.classList.add('show');
       setTimeout(() => {
         toast.classList.remove('show');
-      }, 2400);
+      }, 2600);
     }
 
     initSplit();
